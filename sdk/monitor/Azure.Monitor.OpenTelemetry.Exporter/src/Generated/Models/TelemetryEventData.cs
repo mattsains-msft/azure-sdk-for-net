@@ -8,10 +8,14 @@
 using System;
 using System.Collections.Generic;
 
-namespace Azure.Monitor.OpenTelemetry.Exporter.Models
+namespace Azure.Monitor.OpenTelemetry.Exporter
 {
-    /// <summary> Instances of Event represent structured event records that can be grouped and searched by their properties. Event data item also creates a metric of event count by name. </summary>
-    internal partial class TelemetryEventData : MonitorDomain
+    /// <summary>
+    /// Instances of Event represent structured event records that can be grouped and
+    /// searched by their properties. Event data item also creates a metric of event
+    /// count by name.
+    /// </summary>
+    public partial class TelemetryEventData : MonitorDomain
     {
         /// <summary> Initializes a new instance of <see cref="TelemetryEventData"/>. </summary>
         /// <param name="version"> Schema version. </param>
@@ -28,11 +32,12 @@ namespace Azure.Monitor.OpenTelemetry.Exporter.Models
 
         /// <summary> Initializes a new instance of <see cref="TelemetryEventData"/>. </summary>
         /// <param name="version"> Schema version. </param>
-        /// <param name="additionalProperties"> Additional Properties. </param>
+        /// <param name="kind"> Discriminator property to identify the specific telemetry data type. </param>
+        /// <param name="additionalProperties"></param>
         /// <param name="name"> Event name. Keep it low cardinality to allow proper grouping and useful metrics. </param>
         /// <param name="properties"> Collection of custom properties. </param>
         /// <param name="measurements"> Collection of custom measurements. </param>
-        internal TelemetryEventData(int version, IDictionary<string, object> additionalProperties, string name, IDictionary<string, string> properties, IDictionary<string, double> measurements) : base(version, additionalProperties)
+        internal TelemetryEventData(int version, MonitorDomainKind kind, IDictionary<string, BinaryData> additionalProperties, string name, IDictionary<string, string> properties, IDictionary<string, double> measurements) : base(version, kind, additionalProperties)
         {
             Name = name;
             Properties = properties;
@@ -40,9 +45,11 @@ namespace Azure.Monitor.OpenTelemetry.Exporter.Models
         }
 
         /// <summary> Event name. Keep it low cardinality to allow proper grouping and useful metrics. </summary>
-        public string Name { get; }
+        public string Name { get; set; }
+
         /// <summary> Collection of custom properties. </summary>
         public IDictionary<string, string> Properties { get; }
+
         /// <summary> Collection of custom measurements. </summary>
         public IDictionary<string, double> Measurements { get; }
     }

@@ -5,33 +5,46 @@
 
 #nullable disable
 
+using System;
 using System.Collections.Generic;
 
-namespace Azure.Monitor.OpenTelemetry.Exporter.Models
+namespace Azure.Monitor.OpenTelemetry.Exporter
 {
-    /// <summary> The abstract common base of all domains. </summary>
-    internal partial class MonitorDomain
+    /// <summary>
+    /// The abstract common base of all domains.
+    /// Please note this is the abstract base class. The derived classes available for instantiation are: <see cref="AvailabilityData"/>, <see cref="TelemetryEventData"/>, <see cref="TelemetryExceptionData"/>, <see cref="MessageData"/>, <see cref="MetricsData"/>, <see cref="PageViewData"/>, <see cref="PageViewPerfData"/>, <see cref="RemoteDependencyData"/>, and <see cref="RequestData"/>.
+    /// </summary>
+    public abstract partial class MonitorDomain
     {
+        /// <summary> Keeps track of any properties unknown to the library. </summary>
+        private protected readonly IDictionary<string, BinaryData> _additionalBinaryDataProperties;
+
         /// <summary> Initializes a new instance of <see cref="MonitorDomain"/>. </summary>
         /// <param name="version"> Schema version. </param>
-        public MonitorDomain(int version)
+        private protected MonitorDomain(int version)
         {
             Version = version;
-            AdditionalProperties = new ChangeTrackingDictionary<string, object>();
+            _additionalBinaryDataProperties = new ChangeTrackingDictionary<string, BinaryData>();
         }
 
         /// <summary> Initializes a new instance of <see cref="MonitorDomain"/>. </summary>
         /// <param name="version"> Schema version. </param>
-        /// <param name="additionalProperties"> Additional Properties. </param>
-        internal MonitorDomain(int version, IDictionary<string, object> additionalProperties)
+        /// <param name="kind"> Discriminator property to identify the specific telemetry data type. </param>
+        /// <param name="additionalProperties"></param>
+        internal MonitorDomain(int version, MonitorDomainKind kind, IDictionary<string, BinaryData> additionalProperties)
         {
             Version = version;
-            AdditionalProperties = additionalProperties;
+            Kind = kind;
+            _additionalBinaryDataProperties = additionalProperties;
         }
 
         /// <summary> Schema version. </summary>
-        public int Version { get; }
-        /// <summary> Additional Properties. </summary>
-        public IDictionary<string, object> AdditionalProperties { get; }
+        public int Version { get; set; }
+
+        /// <summary> Discriminator property to identify the specific telemetry data type. </summary>
+        internal MonitorDomainKind Kind { get; set; }
+
+        /// <summary> Gets the AdditionalProperties. </summary>
+        public IDictionary<string, BinaryData> AdditionalProperties => _additionalBinaryDataProperties;
     }
 }

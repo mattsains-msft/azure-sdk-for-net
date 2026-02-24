@@ -7,25 +7,21 @@
 
 using System;
 using System.ClientModel.Primitives;
+using System.Collections.Generic;
 using System.Text.Json;
 
 namespace Azure.Monitor.OpenTelemetry.Exporter
 {
-    /// <summary>
-    /// The abstract common base of all domains.
-    /// Please note this is the abstract base class. The derived classes available for instantiation are: <see cref="AvailabilityData"/>, <see cref="TelemetryEventData"/>, <see cref="TelemetryExceptionData"/>, <see cref="MessageData"/>, <see cref="MetricsData"/>, <see cref="PageViewData"/>, <see cref="PageViewPerfData"/>, <see cref="RemoteDependencyData"/>, and <see cref="RequestData"/>.
-    /// </summary>
-    [PersistableModelProxy(typeof(UnknownMonitorDomain))]
-    public abstract partial class MonitorDomain : IJsonModel<MonitorDomain>
+    internal partial class UnknownMonitorDomain : MonitorDomain, IJsonModel<MonitorDomain>
     {
-        /// <summary> Initializes a new instance of <see cref="MonitorDomain"/> for deserialization. </summary>
-        internal MonitorDomain()
+        /// <summary> Initializes a new instance of <see cref="UnknownMonitorDomain"/> for deserialization. </summary>
+        internal UnknownMonitorDomain()
         {
         }
 
         /// <param name="data"> The data to parse. </param>
         /// <param name="options"> The client options for reading and writing models. </param>
-        protected virtual MonitorDomain PersistableModelCreateCore(BinaryData data, ModelReaderWriterOptions options)
+        protected override MonitorDomain PersistableModelCreateCore(BinaryData data, ModelReaderWriterOptions options)
         {
             string format = options.Format == "W" ? ((IPersistableModel<MonitorDomain>)this).GetFormatFromOptions(options) : options.Format;
             switch (format)
@@ -41,7 +37,7 @@ namespace Azure.Monitor.OpenTelemetry.Exporter
         }
 
         /// <param name="options"> The client options for reading and writing models. </param>
-        protected virtual BinaryData PersistableModelWriteCore(ModelReaderWriterOptions options)
+        protected override BinaryData PersistableModelWriteCore(ModelReaderWriterOptions options)
         {
             string format = options.Format == "W" ? ((IPersistableModel<MonitorDomain>)this).GetFormatFromOptions(options) : options.Format;
             switch (format)
@@ -74,32 +70,14 @@ namespace Azure.Monitor.OpenTelemetry.Exporter
 
         /// <param name="writer"> The JSON writer. </param>
         /// <param name="options"> The client options for reading and writing models. </param>
-        protected virtual void JsonModelWriteCore(Utf8JsonWriter writer, ModelReaderWriterOptions options)
+        protected override void JsonModelWriteCore(Utf8JsonWriter writer, ModelReaderWriterOptions options)
         {
             string format = options.Format == "W" ? ((IPersistableModel<MonitorDomain>)this).GetFormatFromOptions(options) : options.Format;
             if (format != "J")
             {
                 throw new FormatException($"The model {nameof(MonitorDomain)} does not support writing '{format}' format.");
             }
-            writer.WritePropertyName("ver"u8);
-            writer.WriteNumberValue(Version);
-            if (options.Format != "W")
-            {
-                writer.WritePropertyName("kind"u8);
-                writer.WriteStringValue(Kind.ToString());
-            }
-            foreach (var item in AdditionalProperties)
-            {
-                writer.WritePropertyName(item.Key);
-#if NET6_0_OR_GREATER
-                writer.WriteRawValue(item.Value);
-#else
-                using (JsonDocument document = JsonDocument.Parse(item.Value))
-                {
-                    JsonSerializer.Serialize(writer, document.RootElement);
-                }
-#endif
-            }
+            base.JsonModelWriteCore(writer, options);
         }
 
         /// <param name="reader"> The JSON reader. </param>
@@ -108,7 +86,7 @@ namespace Azure.Monitor.OpenTelemetry.Exporter
 
         /// <param name="reader"> The JSON reader. </param>
         /// <param name="options"> The client options for reading and writing models. </param>
-        protected virtual MonitorDomain JsonModelCreateCore(ref Utf8JsonReader reader, ModelReaderWriterOptions options)
+        protected override MonitorDomain JsonModelCreateCore(ref Utf8JsonReader reader, ModelReaderWriterOptions options)
         {
             string format = options.Format == "W" ? ((IPersistableModel<MonitorDomain>)this).GetFormatFromOptions(options) : options.Format;
             if (format != "J")
@@ -121,37 +99,30 @@ namespace Azure.Monitor.OpenTelemetry.Exporter
 
         /// <param name="element"> The JSON element to deserialize. </param>
         /// <param name="options"> The client options for reading and writing models. </param>
-        internal static MonitorDomain DeserializeMonitorDomain(JsonElement element, ModelReaderWriterOptions options)
+        internal static UnknownMonitorDomain DeserializeUnknownMonitorDomain(JsonElement element, ModelReaderWriterOptions options)
         {
             if (element.ValueKind == JsonValueKind.Null)
             {
                 return null;
             }
-            if (element.TryGetProperty("kind"u8, out JsonElement discriminator))
+            int version = default;
+            MonitorDomainKind kind = default;
+            IDictionary<string, BinaryData> additionalProperties = new ChangeTrackingDictionary<string, BinaryData>();
+            foreach (var prop in element.EnumerateObject())
             {
-                switch (discriminator.GetString())
+                if (prop.NameEquals("ver"u8))
                 {
-                    case "AvailabilityData":
-                        return AvailabilityData.DeserializeAvailabilityData(element, options);
-                    case "EventData":
-                        return TelemetryEventData.DeserializeTelemetryEventData(element, options);
-                    case "ExceptionData":
-                        return TelemetryExceptionData.DeserializeTelemetryExceptionData(element, options);
-                    case "MessageData":
-                        return MessageData.DeserializeMessageData(element, options);
-                    case "MetricsData":
-                        return MetricsData.DeserializeMetricsData(element, options);
-                    case "PageViewData":
-                        return PageViewData.DeserializePageViewData(element, options);
-                    case "PageViewPerfData":
-                        return PageViewPerfData.DeserializePageViewPerfData(element, options);
-                    case "RemoteDependencyData":
-                        return RemoteDependencyData.DeserializeRemoteDependencyData(element, options);
-                    case "RequestData":
-                        return RequestData.DeserializeRequestData(element, options);
+                    version = prop.Value.GetInt32();
+                    continue;
                 }
+                if (prop.NameEquals("kind"u8))
+                {
+                    kind = new MonitorDomainKind(prop.Value.GetString());
+                    continue;
+                }
+                additionalProperties.Add(prop.Name, BinaryData.FromString(prop.Value.GetRawText()));
             }
-            return UnknownMonitorDomain.DeserializeUnknownMonitorDomain(element, options);
+            return new UnknownMonitorDomain(version, kind, additionalProperties);
         }
     }
 }

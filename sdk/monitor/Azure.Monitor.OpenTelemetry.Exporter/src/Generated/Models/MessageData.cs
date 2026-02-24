@@ -8,10 +8,14 @@
 using System;
 using System.Collections.Generic;
 
-namespace Azure.Monitor.OpenTelemetry.Exporter.Models
+namespace Azure.Monitor.OpenTelemetry.Exporter
 {
-    /// <summary> Instances of Message represent printf-like trace statements that are text-searched. Log4Net, NLog and other text-based log file entries are translated into instances of this type. The message does not have measurements. </summary>
-    internal partial class MessageData : MonitorDomain
+    /// <summary>
+    /// Instances of Message represent printf-like trace statements that are
+    /// text-searched. Log4Net, NLog and other text-based log file entries are
+    /// translated into instances of this type. The message does not have measurements.
+    /// </summary>
+    public partial class MessageData : MonitorDomain
     {
         /// <summary> Initializes a new instance of <see cref="MessageData"/>. </summary>
         /// <param name="version"> Schema version. </param>
@@ -28,12 +32,13 @@ namespace Azure.Monitor.OpenTelemetry.Exporter.Models
 
         /// <summary> Initializes a new instance of <see cref="MessageData"/>. </summary>
         /// <param name="version"> Schema version. </param>
-        /// <param name="additionalProperties"> Additional Properties. </param>
+        /// <param name="kind"> Discriminator property to identify the specific telemetry data type. </param>
+        /// <param name="additionalProperties"></param>
         /// <param name="message"> Trace message. </param>
         /// <param name="severityLevel"> Trace severity level. </param>
         /// <param name="properties"> Collection of custom properties. </param>
         /// <param name="measurements"> Collection of custom measurements. </param>
-        internal MessageData(int version, IDictionary<string, object> additionalProperties, string message, SeverityLevel? severityLevel, IDictionary<string, string> properties, IDictionary<string, double> measurements) : base(version, additionalProperties)
+        internal MessageData(int version, MonitorDomainKind kind, IDictionary<string, BinaryData> additionalProperties, string message, SeverityLevel? severityLevel, IDictionary<string, string> properties, IDictionary<string, double> measurements) : base(version, kind, additionalProperties)
         {
             Message = message;
             SeverityLevel = severityLevel;
@@ -42,11 +47,14 @@ namespace Azure.Monitor.OpenTelemetry.Exporter.Models
         }
 
         /// <summary> Trace message. </summary>
-        public string Message { get; }
+        public string Message { get; set; }
+
         /// <summary> Trace severity level. </summary>
         public SeverityLevel? SeverityLevel { get; set; }
+
         /// <summary> Collection of custom properties. </summary>
         public IDictionary<string, string> Properties { get; }
+
         /// <summary> Collection of custom measurements. </summary>
         public IDictionary<string, double> Measurements { get; }
     }
