@@ -1,5 +1,5 @@
 repo: Azure/azure-rest-api-specs
-commit: e3bbe793339cafba4398afcbc702566ddffafb29
+commit: ce7275c8ffe2951a1acc59d56559cda300173368
 directory: specification/applicationinsights/data-plane/Exporters
-emitterPackageJsonPath: eng/http-client-csharp-emitter-package.json
+emitterPackageJsonPath: eng/azure-typespec-http-client-csharp-emitter-package.json
 entrypointFile: client.tsp

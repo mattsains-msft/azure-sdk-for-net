@@ -11,9 +11,9 @@ using Azure.Monitor.OpenTelemetry.Exporter.Internals.Platform;
 
 using OpenTelemetry.Logs;
 
-namespace Azure.Monitor.OpenTelemetry.Exporter.Models
+namespace Azure.Monitor.OpenTelemetry.Exporter
 {
-    internal partial class TelemetryItem
+    public partial class TelemetryItem
     {
         private static volatile string? s_cloudRoleNameOverride;
         private static volatile string? s_cloudRoleInstanceOverride;
@@ -96,7 +96,7 @@ namespace Azure.Monitor.OpenTelemetry.Exporter.Models
             }
         }
 
-        public TelemetryItem(string name, TelemetryItem telemetryItem, ActivitySpanId activitySpanId, ActivityKind kind, DateTimeOffset activityEventTimeStamp) :
+        internal TelemetryItem(string name, TelemetryItem telemetryItem, ActivitySpanId activitySpanId, ActivityKind kind, DateTimeOffset activityEventTimeStamp) :
                         this(name, FormatUtcTimestamp(activityEventTimeStamp.DateTime))
         {
             Tags[ContextTagKeys.AiOperationParentId.ToString()] = activitySpanId.ToHexString();
@@ -120,7 +120,7 @@ namespace Azure.Monitor.OpenTelemetry.Exporter.Models
             }
         }
 
-        public TelemetryItem (string name, LogRecord logRecord, AzureMonitorResource? resource, string instrumentationKey, string? microsoftClientIp) :
+        internal TelemetryItem (string name, LogRecord logRecord, AzureMonitorResource? resource, string instrumentationKey, string? microsoftClientIp) :
             this(name, FormatUtcTimestamp(logRecord.Timestamp))
         {
             if (logRecord.TraceId != default)
@@ -142,12 +142,12 @@ namespace Azure.Monitor.OpenTelemetry.Exporter.Models
             SetResourceSdkVersionAndIkey(resource, instrumentationKey);
         }
 
-        public TelemetryItem(DateTime time, AzureMonitorResource? resource, string instrumentationKey) : this("Metric", FormatUtcTimestamp(time))
+        internal TelemetryItem(DateTime time, AzureMonitorResource? resource, string instrumentationKey) : this("Metric", FormatUtcTimestamp(time))
         {
             SetResourceSdkVersionAndIkey(resource, instrumentationKey);
         }
 
-        public TelemetryItem(DateTime time, AzureMonitorResource? resource, string instrumentationKey, MonitorBase monitorBaseData) : this(time, resource, instrumentationKey)
+        internal TelemetryItem(DateTime time, AzureMonitorResource? resource, string instrumentationKey, MonitorBase monitorBaseData) : this(time, resource, instrumentationKey)
         {
             Data = monitorBaseData;
         }
