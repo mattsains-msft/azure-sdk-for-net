@@ -7,15 +7,11 @@
 
 using System;
 using System.Collections.Generic;
+using Azure.Monitor.OpenTelemetry.Exporter;
 
-namespace Azure.Monitor.OpenTelemetry.Exporter
+namespace Azure.Monitor.OpenTelemetry.Exporter.Models
 {
-    /// <summary>
-    /// An instance of PageViewPerf represents: a page view with no performance data, a
-    /// page view with performance data, or just the performance data of an earlier
-    /// page request.
-    /// </summary>
-    public partial class PageViewPerfData : MonitorDomain
+    internal partial class PageViewPerfData : MonitorDomain
     {
         /// <summary> Initializes a new instance of <see cref="PageViewPerfData"/>. </summary>
         /// <param name="version"> Schema version. </param>
@@ -24,12 +20,8 @@ namespace Azure.Monitor.OpenTelemetry.Exporter
         /// other telemetry items.
         /// </param>
         /// <param name="name"> Event name. Keep it low cardinality to allow proper grouping and useful metrics. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="id"/> or <paramref name="name"/> is null. </exception>
         public PageViewPerfData(int version, string id, string name) : base(version)
         {
-            Argument.AssertNotNull(id, nameof(id));
-            Argument.AssertNotNull(name, nameof(name));
-
             Id = id;
             Name = name;
             Properties = new ChangeTrackingDictionary<string, string>();

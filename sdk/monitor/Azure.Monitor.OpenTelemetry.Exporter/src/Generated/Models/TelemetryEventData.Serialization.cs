@@ -9,15 +9,11 @@ using System;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using Azure.Monitor.OpenTelemetry.Exporter;
 
-namespace Azure.Monitor.OpenTelemetry.Exporter
+namespace Azure.Monitor.OpenTelemetry.Exporter.Models
 {
-    /// <summary>
-    /// Instances of Event represent structured event records that can be grouped and
-    /// searched by their properties. Event data item also creates a metric of event
-    /// count by name.
-    /// </summary>
-    public partial class TelemetryEventData : MonitorDomain, IJsonModel<TelemetryEventData>
+    internal partial class TelemetryEventData : MonitorDomain, IJsonModel<TelemetryEventData>
     {
         /// <summary> Initializes a new instance of <see cref="TelemetryEventData"/> for deserialization. </summary>
         internal TelemetryEventData()

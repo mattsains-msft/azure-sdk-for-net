@@ -8,15 +8,12 @@
 using System;
 using System.ClientModel.Primitives;
 using System.Text.Json;
+using Azure.Monitor.OpenTelemetry.Exporter;
 
-namespace Azure.Monitor.OpenTelemetry.Exporter
+namespace Azure.Monitor.OpenTelemetry.Exporter.Models
 {
-    /// <summary>
-    /// The abstract common base of all domains.
-    /// Please note this is the abstract base class. The derived classes available for instantiation are: <see cref="AvailabilityData"/>, <see cref="TelemetryEventData"/>, <see cref="TelemetryExceptionData"/>, <see cref="MessageData"/>, <see cref="MetricsData"/>, <see cref="PageViewData"/>, <see cref="PageViewPerfData"/>, <see cref="RemoteDependencyData"/>, and <see cref="RequestData"/>.
-    /// </summary>
     [PersistableModelProxy(typeof(UnknownMonitorDomain))]
-    public abstract partial class MonitorDomain : IJsonModel<MonitorDomain>
+    internal abstract partial class MonitorDomain : IJsonModel<MonitorDomain>
     {
         /// <summary> Initializes a new instance of <see cref="MonitorDomain"/> for deserialization. </summary>
         internal MonitorDomain()

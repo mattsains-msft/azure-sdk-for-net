@@ -8,10 +8,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace Azure.Monitor.OpenTelemetry.Exporter
+namespace Azure.Monitor.OpenTelemetry.Exporter.Models
 {
-    /// <summary> Data struct to contain only C section with custom fields. </summary>
-    public partial class MonitorBase
+    internal partial class MonitorBase
     {
         /// <summary> Keeps track of any properties unknown to the library. </summary>
         private protected readonly IDictionary<string, BinaryData> _additionalBinaryDataProperties;

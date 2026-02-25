@@ -7,14 +7,11 @@
 
 using System;
 using System.Collections.Generic;
+using Azure.Monitor.OpenTelemetry.Exporter;
 
-namespace Azure.Monitor.OpenTelemetry.Exporter
+namespace Azure.Monitor.OpenTelemetry.Exporter.Models
 {
-    /// <summary>
-    /// The abstract common base of all domains.
-    /// Please note this is the abstract base class. The derived classes available for instantiation are: <see cref="AvailabilityData"/>, <see cref="TelemetryEventData"/>, <see cref="TelemetryExceptionData"/>, <see cref="MessageData"/>, <see cref="MetricsData"/>, <see cref="PageViewData"/>, <see cref="PageViewPerfData"/>, <see cref="RemoteDependencyData"/>, and <see cref="RequestData"/>.
-    /// </summary>
-    public abstract partial class MonitorDomain
+    internal abstract partial class MonitorDomain
     {
         /// <summary> Keeps track of any properties unknown to the library. </summary>
         private protected readonly IDictionary<string, BinaryData> _additionalBinaryDataProperties;

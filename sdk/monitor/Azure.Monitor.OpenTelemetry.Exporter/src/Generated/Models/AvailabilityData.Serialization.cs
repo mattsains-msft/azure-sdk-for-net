@@ -9,14 +9,11 @@ using System;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using Azure.Monitor.OpenTelemetry.Exporter;
 
-namespace Azure.Monitor.OpenTelemetry.Exporter
+namespace Azure.Monitor.OpenTelemetry.Exporter.Models
 {
-    /// <summary>
-    /// Instances of AvailabilityData represent the result of executing an availability
-    /// test.
-    /// </summary>
-    public partial class AvailabilityData : MonitorDomain, IJsonModel<AvailabilityData>
+    internal partial class AvailabilityData : MonitorDomain, IJsonModel<AvailabilityData>
     {
         /// <summary> Initializes a new instance of <see cref="AvailabilityData"/> for deserialization. </summary>
         internal AvailabilityData()

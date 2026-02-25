@@ -9,11 +9,11 @@ using System;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using Azure.Monitor.OpenTelemetry.Exporter;
 
-namespace Azure.Monitor.OpenTelemetry.Exporter
+namespace Azure.Monitor.OpenTelemetry.Exporter.Models
 {
-    /// <summary> The error details. </summary>
-    public partial class TelemetryErrorDetails : IJsonModel<TelemetryErrorDetails>
+    internal partial class TelemetryErrorDetails : IJsonModel<TelemetryErrorDetails>
     {
         /// <param name="data"> The data to parse. </param>
         /// <param name="options"> The client options for reading and writing models. </param>

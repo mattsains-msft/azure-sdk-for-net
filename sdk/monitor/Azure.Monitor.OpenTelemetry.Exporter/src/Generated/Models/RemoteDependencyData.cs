@@ -7,14 +7,11 @@
 
 using System;
 using System.Collections.Generic;
+using Azure.Monitor.OpenTelemetry.Exporter;
 
-namespace Azure.Monitor.OpenTelemetry.Exporter
+namespace Azure.Monitor.OpenTelemetry.Exporter.Models
 {
-    /// <summary>
-    /// An instance of Remote Dependency represents an interaction of the monitored
-    /// component with a remote component/service like SQL or an HTTP endpoint.
-    /// </summary>
-    public partial class RemoteDependencyData : MonitorDomain
+    internal partial class RemoteDependencyData : MonitorDomain
     {
         /// <summary> Initializes a new instance of <see cref="RemoteDependencyData"/>. </summary>
         /// <param name="version"> Schema version. </param>
@@ -23,12 +20,8 @@ namespace Azure.Monitor.OpenTelemetry.Exporter
         /// Examples are stored procedure name and URL path template.
         /// </param>
         /// <param name="duration"> Request duration in format: DD.HH:MM:SS.MMMMMM. Must be less than 1000 days. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="name"/> or <paramref name="duration"/> is null. </exception>
         public RemoteDependencyData(int version, string name, string duration) : base(version)
         {
-            Argument.AssertNotNull(name, nameof(name));
-            Argument.AssertNotNull(duration, nameof(duration));
-
             Name = name;
             Duration = duration;
             Properties = new ChangeTrackingDictionary<string, string>();

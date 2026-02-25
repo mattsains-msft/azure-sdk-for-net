@@ -8,10 +8,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace Azure.Monitor.OpenTelemetry.Exporter
+namespace Azure.Monitor.OpenTelemetry.Exporter.Models
 {
-    /// <summary> Stack frame information. </summary>
-    public partial class StackFrame
+    internal partial class StackFrame
     {
         /// <summary> Keeps track of any properties unknown to the library. </summary>
         private protected readonly IDictionary<string, BinaryData> _additionalBinaryDataProperties;
@@ -19,11 +18,8 @@ namespace Azure.Monitor.OpenTelemetry.Exporter
         /// <summary> Initializes a new instance of <see cref="StackFrame"/>. </summary>
         /// <param name="level"> Level in the stack. </param>
         /// <param name="method"> Method name. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="method"/> is null. </exception>
         public StackFrame(int level, string @method)
         {
-            Argument.AssertNotNull(@method, nameof(@method));
-
             Level = level;
             Method = @method;
         }

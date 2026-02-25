@@ -8,10 +8,9 @@
 using System;
 using System.ComponentModel;
 
-namespace Azure.Monitor.OpenTelemetry.Exporter
+namespace Azure.Monitor.OpenTelemetry.Exporter.Models
 {
-    /// <summary> Identifies the specific telemetry data type. </summary>
-    public readonly partial struct MonitorDomainKind : IEquatable<MonitorDomainKind>
+    internal readonly partial struct MonitorDomainKind : IEquatable<MonitorDomainKind>
     {
         private readonly string _value;
         /// <summary> AvailabilityData type. </summary>
@@ -35,11 +34,8 @@ namespace Azure.Monitor.OpenTelemetry.Exporter
 
         /// <summary> Initializes a new instance of <see cref="MonitorDomainKind"/>. </summary>
         /// <param name="value"> The value. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="value"/> is null. </exception>
         public MonitorDomainKind(string value)
         {
-            Argument.AssertNotNull(value, nameof(value));
-
             _value = value;
         }
 

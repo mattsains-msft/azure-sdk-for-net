@@ -9,11 +9,11 @@ using System;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using Azure.Monitor.OpenTelemetry.Exporter;
 
-namespace Azure.Monitor.OpenTelemetry.Exporter
+namespace Azure.Monitor.OpenTelemetry.Exporter.Models
 {
-    /// <summary> Exception details of the exception in a chain. </summary>
-    public partial class TelemetryExceptionDetails : IJsonModel<TelemetryExceptionDetails>
+    internal partial class TelemetryExceptionDetails : IJsonModel<TelemetryExceptionDetails>
     {
         /// <summary> Initializes a new instance of <see cref="TelemetryExceptionDetails"/> for deserialization. </summary>
         internal TelemetryExceptionDetails()

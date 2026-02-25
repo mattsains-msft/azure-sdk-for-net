@@ -9,11 +9,11 @@ using System;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using Azure.Monitor.OpenTelemetry.Exporter;
 
-namespace Azure.Monitor.OpenTelemetry.Exporter
+namespace Azure.Monitor.OpenTelemetry.Exporter.Models
 {
-    /// <summary> Stack frame information. </summary>
-    public partial class StackFrame : IJsonModel<StackFrame>
+    internal partial class StackFrame : IJsonModel<StackFrame>
     {
         /// <summary> Initializes a new instance of <see cref="StackFrame"/> for deserialization. </summary>
         internal StackFrame()

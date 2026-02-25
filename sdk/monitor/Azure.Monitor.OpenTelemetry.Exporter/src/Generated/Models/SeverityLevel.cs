@@ -8,10 +8,9 @@
 using System;
 using System.ComponentModel;
 
-namespace Azure.Monitor.OpenTelemetry.Exporter
+namespace Azure.Monitor.OpenTelemetry.Exporter.Models
 {
-    /// <summary> Defines the level of severity for the event. </summary>
-    public readonly partial struct SeverityLevel : IEquatable<SeverityLevel>
+    internal readonly partial struct SeverityLevel : IEquatable<SeverityLevel>
     {
         private readonly string _value;
         /// <summary> Verbose level. </summary>
@@ -27,11 +26,8 @@ namespace Azure.Monitor.OpenTelemetry.Exporter
 
         /// <summary> Initializes a new instance of <see cref="SeverityLevel"/>. </summary>
         /// <param name="value"> The value. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="value"/> is null. </exception>
         public SeverityLevel(string value)
         {
-            Argument.AssertNotNull(value, nameof(value));
-
             _value = value;
         }
 

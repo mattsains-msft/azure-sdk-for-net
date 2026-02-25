@@ -8,10 +8,9 @@
 using System;
 using System.ComponentModel;
 
-namespace Azure.Monitor.OpenTelemetry.Exporter
+namespace Azure.Monitor.OpenTelemetry.Exporter.Models
 {
-    /// <summary> Type of the metric data. </summary>
-    public readonly partial struct DataPointType : IEquatable<DataPointType>
+    internal readonly partial struct DataPointType : IEquatable<DataPointType>
     {
         private readonly string _value;
         /// <summary> Single measurement. </summary>
@@ -21,11 +20,8 @@ namespace Azure.Monitor.OpenTelemetry.Exporter
 
         /// <summary> Initializes a new instance of <see cref="DataPointType"/>. </summary>
         /// <param name="value"> The value. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="value"/> is null. </exception>
         public DataPointType(string value)
         {
-            Argument.AssertNotNull(value, nameof(value));
-
             _value = value;
         }
 

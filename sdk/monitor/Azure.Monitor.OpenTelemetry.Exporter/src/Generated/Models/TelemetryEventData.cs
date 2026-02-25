@@ -7,24 +7,17 @@
 
 using System;
 using System.Collections.Generic;
+using Azure.Monitor.OpenTelemetry.Exporter;
 
-namespace Azure.Monitor.OpenTelemetry.Exporter
+namespace Azure.Monitor.OpenTelemetry.Exporter.Models
 {
-    /// <summary>
-    /// Instances of Event represent structured event records that can be grouped and
-    /// searched by their properties. Event data item also creates a metric of event
-    /// count by name.
-    /// </summary>
-    public partial class TelemetryEventData : MonitorDomain
+    internal partial class TelemetryEventData : MonitorDomain
     {
         /// <summary> Initializes a new instance of <see cref="TelemetryEventData"/>. </summary>
         /// <param name="version"> Schema version. </param>
         /// <param name="name"> Event name. Keep it low cardinality to allow proper grouping and useful metrics. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="name"/> is null. </exception>
         public TelemetryEventData(int version, string name) : base(version)
         {
-            Argument.AssertNotNull(name, nameof(name));
-
             Name = name;
             Properties = new ChangeTrackingDictionary<string, string>();
             Measurements = new ChangeTrackingDictionary<string, double>();

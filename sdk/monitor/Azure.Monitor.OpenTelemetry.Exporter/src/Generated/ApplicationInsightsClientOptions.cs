@@ -29,8 +29,7 @@ namespace Azure.Monitor.OpenTelemetry.Exporter
         /// <summary> Gets the Version. </summary>
         internal string Version { get; }
 
-        /// <summary> The version of the service to use. </summary>
-        public enum ServiceVersion
+        internal enum ServiceVersion
         {
             /// <summary> The V2.1 API version. </summary>
             V2_1 = 1

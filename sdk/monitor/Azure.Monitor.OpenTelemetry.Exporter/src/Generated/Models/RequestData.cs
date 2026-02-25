@@ -7,15 +7,11 @@
 
 using System;
 using System.Collections.Generic;
+using Azure.Monitor.OpenTelemetry.Exporter;
 
-namespace Azure.Monitor.OpenTelemetry.Exporter
+namespace Azure.Monitor.OpenTelemetry.Exporter.Models
 {
-    /// <summary>
-    /// An instance of Request represents completion of an external request to the
-    /// application to do work and contains a summary of that request execution and the
-    /// results.
-    /// </summary>
-    public partial class RequestData : MonitorDomain
+    internal partial class RequestData : MonitorDomain
     {
         /// <summary> Initializes a new instance of <see cref="RequestData"/>. </summary>
         /// <param name="version"> Schema version. </param>
@@ -26,13 +22,8 @@ namespace Azure.Monitor.OpenTelemetry.Exporter
         /// <param name="duration"> Request duration in format: DD.HH:MM:SS.MMMMMM. Must be less than 1000 days. </param>
         /// <param name="success"> Indication of successful or unsuccessful call. </param>
         /// <param name="responseCode"> Result of a request execution. HTTP status code for HTTP requests. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="id"/>, <paramref name="duration"/> or <paramref name="responseCode"/> is null. </exception>
         public RequestData(int version, string id, string duration, bool success, string responseCode) : base(version)
         {
-            Argument.AssertNotNull(id, nameof(id));
-            Argument.AssertNotNull(duration, nameof(duration));
-            Argument.AssertNotNull(responseCode, nameof(responseCode));
-
             Id = id;
             Duration = duration;
             Success = success;

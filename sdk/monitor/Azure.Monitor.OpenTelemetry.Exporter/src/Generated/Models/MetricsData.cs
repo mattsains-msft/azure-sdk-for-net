@@ -8,14 +8,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Azure.Monitor.OpenTelemetry.Exporter;
 
-namespace Azure.Monitor.OpenTelemetry.Exporter
+namespace Azure.Monitor.OpenTelemetry.Exporter.Models
 {
-    /// <summary>
-    /// An instance of the Metric item is a list of measurements (single data points)
-    /// and/or aggregations.
-    /// </summary>
-    public partial class MetricsData : MonitorDomain
+    internal partial class MetricsData : MonitorDomain
     {
         /// <summary> Initializes a new instance of <see cref="MetricsData"/>. </summary>
         /// <param name="version"> Schema version. </param>
@@ -24,11 +21,8 @@ namespace Azure.Monitor.OpenTelemetry.Exporter
         /// Application Insights storage. If multiple data points were sent only the first
         /// one will be used.
         /// </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="metrics"/> is null. </exception>
         public MetricsData(int version, IEnumerable<MetricDataPoint> metrics) : base(version)
         {
-            Argument.AssertNotNull(metrics, nameof(metrics));
-
             Metrics = metrics.ToList();
             Properties = new ChangeTrackingDictionary<string, string>();
         }

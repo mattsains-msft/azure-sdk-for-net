@@ -9,15 +9,11 @@ using System;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using Azure.Monitor.OpenTelemetry.Exporter;
 
-namespace Azure.Monitor.OpenTelemetry.Exporter
+namespace Azure.Monitor.OpenTelemetry.Exporter.Models
 {
-    /// <summary>
-    /// An instance of Request represents completion of an external request to the
-    /// application to do work and contains a summary of that request execution and the
-    /// results.
-    /// </summary>
-    public partial class RequestData : MonitorDomain, IJsonModel<RequestData>
+    internal partial class RequestData : MonitorDomain, IJsonModel<RequestData>
     {
         /// <summary> Initializes a new instance of <see cref="RequestData"/> for deserialization. </summary>
         internal RequestData()

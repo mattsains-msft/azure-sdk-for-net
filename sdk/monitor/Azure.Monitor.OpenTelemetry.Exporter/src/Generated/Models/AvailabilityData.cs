@@ -7,14 +7,11 @@
 
 using System;
 using System.Collections.Generic;
+using Azure.Monitor.OpenTelemetry.Exporter;
 
-namespace Azure.Monitor.OpenTelemetry.Exporter
+namespace Azure.Monitor.OpenTelemetry.Exporter.Models
 {
-    /// <summary>
-    /// Instances of AvailabilityData represent the result of executing an availability
-    /// test.
-    /// </summary>
-    public partial class AvailabilityData : MonitorDomain
+    internal partial class AvailabilityData : MonitorDomain
     {
         /// <summary> Initializes a new instance of <see cref="AvailabilityData"/>. </summary>
         /// <param name="version"> Schema version. </param>
@@ -25,13 +22,8 @@ namespace Azure.Monitor.OpenTelemetry.Exporter
         /// <param name="name"> Name of the test that these availability results represent. </param>
         /// <param name="duration"> Duration in format: DD.HH:MM:SS.MMMMMM. Must be less than 1000 days. </param>
         /// <param name="success"> Success flag. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="id"/>, <paramref name="name"/> or <paramref name="duration"/> is null. </exception>
         public AvailabilityData(int version, string id, string name, string duration, bool success) : base(version)
         {
-            Argument.AssertNotNull(id, nameof(id));
-            Argument.AssertNotNull(name, nameof(name));
-            Argument.AssertNotNull(duration, nameof(duration));
-
             Id = id;
             Name = name;
             Duration = duration;

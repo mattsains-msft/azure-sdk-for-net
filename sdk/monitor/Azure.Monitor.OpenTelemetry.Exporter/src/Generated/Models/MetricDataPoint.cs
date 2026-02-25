@@ -8,10 +8,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace Azure.Monitor.OpenTelemetry.Exporter
+namespace Azure.Monitor.OpenTelemetry.Exporter.Models
 {
-    /// <summary> Metric data single measurement. </summary>
-    public partial class MetricDataPoint
+    internal partial class MetricDataPoint
     {
         /// <summary> Keeps track of any properties unknown to the library. </summary>
         private protected readonly IDictionary<string, BinaryData> _additionalBinaryDataProperties;
@@ -22,11 +21,8 @@ namespace Azure.Monitor.OpenTelemetry.Exporter
         /// Single value for measurement. Sum of individual measurements for the
         /// aggregation.
         /// </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="name"/> is null. </exception>
         public MetricDataPoint(string name, double value)
         {
-            Argument.AssertNotNull(name, nameof(name));
-
             Name = name;
             Value = value;
         }

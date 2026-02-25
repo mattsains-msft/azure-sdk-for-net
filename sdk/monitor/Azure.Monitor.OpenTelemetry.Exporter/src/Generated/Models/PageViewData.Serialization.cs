@@ -9,14 +9,11 @@ using System;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using Azure.Monitor.OpenTelemetry.Exporter;
 
-namespace Azure.Monitor.OpenTelemetry.Exporter
+namespace Azure.Monitor.OpenTelemetry.Exporter.Models
 {
-    /// <summary>
-    /// An instance of PageView represents a generic action on a page like a button
-    /// click. It is also the base type for PageView.
-    /// </summary>
-    public partial class PageViewData : MonitorDomain, IJsonModel<PageViewData>
+    internal partial class PageViewData : MonitorDomain, IJsonModel<PageViewData>
     {
         /// <summary> Initializes a new instance of <see cref="PageViewData"/> for deserialization. </summary>
         internal PageViewData()

@@ -9,11 +9,11 @@ using System;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using Azure.Monitor.OpenTelemetry.Exporter;
 
-namespace Azure.Monitor.OpenTelemetry.Exporter
+namespace Azure.Monitor.OpenTelemetry.Exporter.Models
 {
-    /// <summary> Metric data single measurement. </summary>
-    public partial class MetricDataPoint : IJsonModel<MetricDataPoint>
+    internal partial class MetricDataPoint : IJsonModel<MetricDataPoint>
     {
         /// <summary> Initializes a new instance of <see cref="MetricDataPoint"/> for deserialization. </summary>
         internal MetricDataPoint()

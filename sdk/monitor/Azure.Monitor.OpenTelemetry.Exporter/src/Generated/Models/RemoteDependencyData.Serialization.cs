@@ -9,14 +9,11 @@ using System;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using Azure.Monitor.OpenTelemetry.Exporter;
 
-namespace Azure.Monitor.OpenTelemetry.Exporter
+namespace Azure.Monitor.OpenTelemetry.Exporter.Models
 {
-    /// <summary>
-    /// An instance of Remote Dependency represents an interaction of the monitored
-    /// component with a remote component/service like SQL or an HTTP endpoint.
-    /// </summary>
-    public partial class RemoteDependencyData : MonitorDomain, IJsonModel<RemoteDependencyData>
+    internal partial class RemoteDependencyData : MonitorDomain, IJsonModel<RemoteDependencyData>
     {
         /// <summary> Initializes a new instance of <see cref="RemoteDependencyData"/> for deserialization. </summary>
         internal RemoteDependencyData()
