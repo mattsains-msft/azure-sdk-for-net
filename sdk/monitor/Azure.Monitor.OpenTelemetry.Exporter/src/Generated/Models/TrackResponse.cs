@@ -11,6 +11,7 @@ using Azure.Monitor.OpenTelemetry.Exporter;
 
 namespace Azure.Monitor.OpenTelemetry.Exporter.Models
 {
+    /// <summary> Response containing the status of each telemetry item. </summary>
     internal partial class TrackResponse
     {
         /// <summary> Keeps track of any properties unknown to the library. </summary>
@@ -42,6 +43,6 @@ namespace Azure.Monitor.OpenTelemetry.Exporter.Models
         public int? ItemsAccepted { get; }
 
         /// <summary> An array of error detail objects. </summary>
-        public IList<TelemetryErrorDetails> Errors { get; }
+        internal IList<TelemetryErrorDetails> Errors { get; }
     }
 }

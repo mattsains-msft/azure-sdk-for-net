@@ -13,8 +13,7 @@ using Azure.Monitor.OpenTelemetry.Exporter;
 
 namespace Azure.Monitor.OpenTelemetry.Exporter.Models
 {
-    /// <summary> System variables for a telemetry item. </summary>
-    public partial class TelemetryItem : IJsonModel<TelemetryItem>
+    internal partial class TelemetryItem : IJsonModel<TelemetryItem>
     {
         /// <summary> Initializes a new instance of <see cref="TelemetryItem"/> for deserialization. </summary>
         internal TelemetryItem()

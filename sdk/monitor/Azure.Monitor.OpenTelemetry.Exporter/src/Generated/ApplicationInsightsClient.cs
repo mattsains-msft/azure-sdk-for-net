@@ -17,7 +17,7 @@ using Azure.Monitor.OpenTelemetry.Exporter.Models;
 namespace Azure.Monitor.OpenTelemetry.Exporter
 {
     /// <summary> OpenTelemetry Exporter for Azure Monitor. </summary>
-    public partial class ApplicationInsightsClient
+    internal partial class ApplicationInsightsClient
     {
         private readonly Uri _endpoint;
         /// <summary> A credential used to authenticate to the service. </summary>
@@ -50,7 +50,7 @@ namespace Azure.Monitor.OpenTelemetry.Exporter
         /// <param name="credential"> A credential used to authenticate to the service. </param>
         /// <param name="options"> The options for configuring the client. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="endpoint"/> or <paramref name="credential"/> is null. </exception>
-        public ApplicationInsightsClient(Uri endpoint, TokenCredential credential, ApplicationInsightsClientOptions options)
+        internal ApplicationInsightsClient(Uri endpoint, TokenCredential credential, ApplicationInsightsClientOptions options)
         {
             Argument.AssertNotNull(endpoint, nameof(endpoint));
             Argument.AssertNotNull(credential, nameof(credential));
@@ -81,14 +81,17 @@ namespace Azure.Monitor.OpenTelemetry.Exporter
         /// </summary>
         /// <param name="content"> The content to send as the body of the request. </param>
         /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="content"/> is null. </exception>
         /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
         /// <returns> The response returned from the service. </returns>
-        internal virtual Response Track(RequestContent content, RequestContext context = null)
+        public virtual Response Track(RequestContent content, RequestContext context = null)
         {
             using DiagnosticScope scope = ClientDiagnostics.CreateScope("ApplicationInsightsClient.Track");
             scope.Start();
             try
             {
+                Argument.AssertNotNull(content, nameof(content));
+
                 using HttpMessage message = CreateTrackRequest(content, context);
                 return Pipeline.ProcessMessage(message, context);
             }
@@ -110,14 +113,17 @@ namespace Azure.Monitor.OpenTelemetry.Exporter
         /// </summary>
         /// <param name="content"> The content to send as the body of the request. </param>
         /// <param name="context"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="content"/> is null. </exception>
         /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
         /// <returns> The response returned from the service. </returns>
-        internal virtual async Task<Response> TrackAsync(RequestContent content, RequestContext context = null)
+        public virtual async Task<Response> TrackAsync(RequestContent content, RequestContext context = null)
         {
             using DiagnosticScope scope = ClientDiagnostics.CreateScope("ApplicationInsightsClient.Track");
             scope.Start();
             try
             {
+                Argument.AssertNotNull(content, nameof(content));
+
                 using HttpMessage message = CreateTrackRequest(content, context);
                 return await Pipeline.ProcessMessageAsync(message, context).ConfigureAwait(false);
             }
@@ -134,9 +140,12 @@ namespace Azure.Monitor.OpenTelemetry.Exporter
         /// </summary>
         /// <param name="body"> The list of telemetry events to track. </param>
         /// <param name="cancellationToken"> The cancellation token that can be used to cancel the operation. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="body"/> is null. </exception>
         /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
         internal virtual Response<TrackResponse> Track(IEnumerable<TelemetryItem> body, CancellationToken cancellationToken = default)
         {
+            Argument.AssertNotNull(body, nameof(body));
+
             using RequestContent content = BinaryContentHelper.FromEnumerable(body);
             Response result = Track(content, cancellationToken.ToRequestContext());
             return Response.FromValue((TrackResponse)result, result);
@@ -148,9 +157,12 @@ namespace Azure.Monitor.OpenTelemetry.Exporter
         /// </summary>
         /// <param name="body"> The list of telemetry events to track. </param>
         /// <param name="cancellationToken"> The cancellation token that can be used to cancel the operation. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="body"/> is null. </exception>
         /// <exception cref="RequestFailedException"> Service returned a non-success status code. </exception>
         internal virtual async Task<Response<TrackResponse>> TrackAsync(IEnumerable<TelemetryItem> body, CancellationToken cancellationToken = default)
         {
+            Argument.AssertNotNull(body, nameof(body));
+
             using RequestContent content = BinaryContentHelper.FromEnumerable(body);
             Response result = await TrackAsync(content, cancellationToken.ToRequestContext()).ConfigureAwait(false);
             return Response.FromValue((TrackResponse)result, result);

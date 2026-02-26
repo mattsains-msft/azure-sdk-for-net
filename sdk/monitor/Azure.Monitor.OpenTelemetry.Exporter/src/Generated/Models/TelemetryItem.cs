@@ -11,8 +11,7 @@ using Azure.Monitor.OpenTelemetry.Exporter;
 
 namespace Azure.Monitor.OpenTelemetry.Exporter.Models
 {
-    /// <summary> System variables for a telemetry item. </summary>
-    public partial class TelemetryItem
+    internal partial class TelemetryItem
     {
         /// <summary> Keeps track of any properties unknown to the library. </summary>
         private protected readonly IDictionary<string, BinaryData> _additionalBinaryDataProperties;
@@ -29,11 +28,8 @@ namespace Azure.Monitor.OpenTelemetry.Exporter.Models
         /// i.e. managed code consumers should not use format 'O' for parsing as it
         /// specifies a fixed length. Example: 2009-06-15T13:45:30.0000000Z.
         /// </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="name"/> is null. </exception>
         public TelemetryItem(string name, DateTimeOffset time)
         {
-            Argument.AssertNotNull(name, nameof(name));
-
             Name = name;
             Time = time;
             Tags = new ChangeTrackingDictionary<string, string>();

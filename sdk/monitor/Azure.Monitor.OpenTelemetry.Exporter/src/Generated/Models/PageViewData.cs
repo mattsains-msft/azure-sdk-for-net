@@ -11,6 +11,10 @@ using Azure.Monitor.OpenTelemetry.Exporter;
 
 namespace Azure.Monitor.OpenTelemetry.Exporter.Models
 {
+    /// <summary>
+    /// An instance of PageView represents a generic action on a page like a button
+    /// click. It is also the base type for PageView.
+    /// </summary>
     internal partial class PageViewData : MonitorDomain
     {
         /// <summary> Initializes a new instance of <see cref="PageViewData"/>. </summary>
@@ -20,8 +24,12 @@ namespace Azure.Monitor.OpenTelemetry.Exporter.Models
         /// other telemetry items.
         /// </param>
         /// <param name="name"> Event name. Keep it low cardinality to allow proper grouping and useful metrics. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="id"/> or <paramref name="name"/> is null. </exception>
         public PageViewData(int version, string id, string name) : base(version)
         {
+            Argument.AssertNotNull(id, nameof(id));
+            Argument.AssertNotNull(name, nameof(name));
+
             Id = id;
             Name = name;
             Properties = new ChangeTrackingDictionary<string, string>();

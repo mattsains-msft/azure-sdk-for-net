@@ -11,7 +11,7 @@ using Azure.Core;
 namespace Azure.Monitor.OpenTelemetry.Exporter
 {
     /// <summary></summary>
-    public partial class ApplicationInsightsClient
+    internal partial class ApplicationInsightsClient
     {
         private static ResponseClassifier _pipelineMessageClassifier200206;
 

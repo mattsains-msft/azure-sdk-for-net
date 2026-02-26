@@ -13,6 +13,11 @@ using Azure.Monitor.OpenTelemetry.Exporter;
 
 namespace Azure.Monitor.OpenTelemetry.Exporter.Models
 {
+    /// <summary>
+    /// An instance of PageViewPerf represents: a page view with no performance data, a
+    /// page view with performance data, or just the performance data of an earlier
+    /// page request.
+    /// </summary>
     internal partial class PageViewPerfData : MonitorDomain, IJsonModel<PageViewPerfData>
     {
         /// <summary> Initializes a new instance of <see cref="PageViewPerfData"/> for deserialization. </summary>

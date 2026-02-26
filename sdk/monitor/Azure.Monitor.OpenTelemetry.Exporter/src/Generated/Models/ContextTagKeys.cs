@@ -7,9 +7,11 @@
 
 using System;
 using System.ComponentModel;
+using Azure.Monitor.OpenTelemetry.Exporter;
 
 namespace Azure.Monitor.OpenTelemetry.Exporter.Models
 {
+    /// <summary> The context tag keys. </summary>
     internal readonly partial struct ContextTagKeys : IEquatable<ContextTagKeys>
     {
         private readonly string _value;
@@ -72,8 +74,11 @@ namespace Azure.Monitor.OpenTelemetry.Exporter.Models
 
         /// <summary> Initializes a new instance of <see cref="ContextTagKeys"/>. </summary>
         /// <param name="value"> The value. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="value"/> is null. </exception>
         public ContextTagKeys(string value)
         {
+            Argument.AssertNotNull(value, nameof(value));
+
             _value = value;
         }
 

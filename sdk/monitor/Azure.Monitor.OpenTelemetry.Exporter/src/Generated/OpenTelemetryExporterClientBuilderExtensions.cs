@@ -13,7 +13,7 @@ using Azure.Monitor.OpenTelemetry.Exporter;
 namespace Microsoft.Extensions.Azure
 {
     /// <summary> Extension methods to add clients to <see cref="IAzureClientBuilder{TClient,TOptions}"/>. </summary>
-    public static partial class OpenTelemetryExporterClientBuilderExtensions
+    internal static partial class OpenTelemetryExporterClientBuilderExtensions
     {
         /// <summary> Registers a <see cref="ApplicationInsightsClient"/> client with the specified <see cref="IAzureClientBuilder{TClient,TOptions}"/>. </summary>
         /// <param name="builder"> The builder to register with. </param>
