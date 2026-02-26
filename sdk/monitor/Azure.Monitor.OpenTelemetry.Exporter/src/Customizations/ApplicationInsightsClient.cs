@@ -15,9 +15,27 @@ using Azure.Monitor.OpenTelemetry.Exporter.Models;
 
 namespace Azure.Monitor.OpenTelemetry.Exporter
 {
-    internal partial class ApplicationInsightsRestClient
+    internal partial class ApplicationInsightsClient
     {
-        private RawRequestUriBuilder _rawRequestUriBuilder;
+        private RawRequestUriBuilder? _rawRequestUriBuilder;
+
+        internal ApplicationInsightsClient(Uri endpoint, AzureMonitorExporterOptions options, HttpPipeline pipeline)
+        {
+            Argument.AssertNotNull(endpoint, nameof(endpoint));
+
+            options ??= new AzureMonitorExporterOptions();
+
+            _endpoint = endpoint;
+            _tokenCredential = options.Credential;
+            Pipeline = HttpPipelineBuilder.Build(options, new HttpPipelinePolicy[] { new BearerTokenAuthenticationPolicy(_tokenCredential, AuthorizationScopes) });
+            _apiVersion = options.Version switch
+            {
+                AzureMonitorExporterOptions.ServiceVersion.v2_1 => "v2.1",
+                _ => throw new NotSupportedException()
+            };
+            ClientDiagnostics = new ClientDiagnostics(options, true);
+            Pipeline = pipeline;
+        }
 
         /// <summary>
         /// This operation sends a sequence of telemetry events that will be monitored by Azure Monitor.
@@ -37,7 +55,7 @@ namespace Azure.Monitor.OpenTelemetry.Exporter
             try
             {
                 RedirectPolicy.SetAllowAutoRedirect(message, false);
-                await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
+                await Pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -65,7 +83,7 @@ namespace Azure.Monitor.OpenTelemetry.Exporter
             try
             {
                 RedirectPolicy.SetAllowAutoRedirect(message, false);
-                await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
+                await Pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -108,16 +126,16 @@ namespace Azure.Monitor.OpenTelemetry.Exporter
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private HttpMessage CreateRequest(RequestContent requestContent)
         {
-            var message = _pipeline.CreateMessage();
+            var message = Pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Post;
             request.Uri = LazyInitializer.EnsureInitialized(ref _rawRequestUriBuilder, () =>
             {
                 var uri = new RawRequestUriBuilder();
-                uri.AppendRaw(_host, false);
+                uri.AppendRaw(_endpoint.Host, false);
                 uri.AppendRaw("/v2.1/track", false);
                 return uri;
-            });
+            })!;
             request.Headers.Add("Content-Type", "application/json");
             request.Headers.Add("Accept", "application/json");
             request.Content = requestContent;

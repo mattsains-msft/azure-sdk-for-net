@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 using System;
+using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -62,7 +63,7 @@ namespace Azure.Monitor.OpenTelemetry.Exporter.Internals
 
             using (JsonDocument document = JsonDocument.Parse(message.Response.ContentStream, default))
             {
-                var value = TrackResponse.DeserializeTrackResponse(document.RootElement);
+                var value = TrackResponse.DeserializeTrackResponse(document.RootElement, ModelReaderWriterOptions.Json);
                 trackResponse = Response.FromValue(value, message.Response);
                 return true;
             }

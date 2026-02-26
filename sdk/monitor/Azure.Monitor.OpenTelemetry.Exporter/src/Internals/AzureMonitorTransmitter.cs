@@ -25,7 +25,7 @@ namespace Azure.Monitor.OpenTelemetry.Exporter.Internals
     /// </summary>
     internal class AzureMonitorTransmitter : ITransmitter
     {
-        internal readonly ApplicationInsightsRestClient _applicationInsightsRestClient;
+        internal readonly ApplicationInsightsClient _applicationInsightsClient;
         internal PersistentBlobProvider? _fileBlobProvider;
         private readonly AzureMonitorStatsbeat? _statsbeat;
         private readonly ConnectionVars _connectionVars;
@@ -47,13 +47,13 @@ namespace Azure.Monitor.OpenTelemetry.Exporter.Internals
 
             _transmissionStateManager = new TransmissionStateManager();
 
-            _applicationInsightsRestClient = InitializeRestClient(options, _connectionVars, out _isAadEnabled);
+            _applicationInsightsClient = InitializeRestClient(options, _connectionVars, out _isAadEnabled);
 
             _fileBlobProvider = InitializeOfflineStorage(platform, _connectionVars, options.DisableOfflineStorage, options.StorageDirectory);
 
             if (_fileBlobProvider != null)
             {
-                _transmitFromStorageHandler = new TransmitFromStorageHandler(_applicationInsightsRestClient, _fileBlobProvider, _transmissionStateManager, _connectionVars, _isAadEnabled);
+                _transmitFromStorageHandler = new TransmitFromStorageHandler(_applicationInsightsClient, _fileBlobProvider, _transmissionStateManager, _connectionVars, _isAadEnabled);
             }
 
             _statsbeat = InitializeStatsbeat(options, _connectionVars, platform);
@@ -78,7 +78,7 @@ namespace Azure.Monitor.OpenTelemetry.Exporter.Internals
             throw new InvalidOperationException("A connection string was not found. Please set your connection string.");
         }
 
-        private static ApplicationInsightsRestClient InitializeRestClient(AzureMonitorExporterOptions options, ConnectionVars connectionVars, out bool isAadEnabled)
+        private static ApplicationInsightsClient InitializeRestClient(AzureMonitorExporterOptions options, ConnectionVars connectionVars, out bool isAadEnabled)
         {
             HttpPipeline pipeline;
 
@@ -102,7 +102,7 @@ namespace Azure.Monitor.OpenTelemetry.Exporter.Internals
                 pipeline = HttpPipelineBuilder.Build(options, httpPipelinePolicy);
             }
 
-            return new ApplicationInsightsRestClient(new ClientDiagnostics(options), pipeline, host: connectionVars.IngestionEndpoint);
+            return new ApplicationInsightsClient(new Uri(connectionVars.IngestionEndpoint), options, pipeline);
         }
 
         private static PersistentBlobProvider? InitializeOfflineStorage(IPlatform platform, ConnectionVars connectionVars, bool disableOfflineStorage, string? configuredStorageDirectory)
@@ -172,8 +172,8 @@ namespace Azure.Monitor.OpenTelemetry.Exporter.Internals
                 if (_transmissionStateManager.State == TransmissionState.Closed)
                 {
                     using var httpMessage = async ?
-                    await _applicationInsightsRestClient.InternalTrackAsync(telemetryItems, cancellationToken).ConfigureAwait(false) :
-                    _applicationInsightsRestClient.InternalTrackAsync(telemetryItems, cancellationToken).Result;
+                    await _applicationInsightsClient.InternalTrackAsync(telemetryItems, cancellationToken).ConfigureAwait(false) :
+                    _applicationInsightsClient.InternalTrackAsync(telemetryItems, cancellationToken).Result;
 
                     result = HttpPipelineHelper.IsSuccess(httpMessage, telemetrySchemaTypeCounter);
 

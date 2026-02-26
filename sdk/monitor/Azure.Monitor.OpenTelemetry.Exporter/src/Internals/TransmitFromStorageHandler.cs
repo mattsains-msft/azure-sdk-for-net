@@ -15,7 +15,7 @@ namespace Azure.Monitor.OpenTelemetry.Exporter.Internals
 {
     internal class TransmitFromStorageHandler : IDisposable
     {
-        private readonly ApplicationInsightsRestClient _applicationInsightsRestClient;
+        private readonly ApplicationInsightsClient _applicationInsightsClient;
         private readonly ConnectionVars _connectionVars;
         internal PersistentBlobProvider _blobProvider;
         private readonly TransmissionStateManager _transmissionStateManager;
@@ -23,9 +23,9 @@ namespace Azure.Monitor.OpenTelemetry.Exporter.Internals
         private readonly bool _isAadEnabled;
         private bool _disposed;
 
-        internal TransmitFromStorageHandler(ApplicationInsightsRestClient applicationInsightsRestClient, PersistentBlobProvider blobProvider, TransmissionStateManager transmissionStateManager, ConnectionVars connectionVars, bool isAadEnabled)
+        internal TransmitFromStorageHandler(ApplicationInsightsClient applicationInsightsClient, PersistentBlobProvider blobProvider, TransmissionStateManager transmissionStateManager, ConnectionVars connectionVars, bool isAadEnabled)
         {
-            _applicationInsightsRestClient = applicationInsightsRestClient;
+            _applicationInsightsClient = applicationInsightsClient;
             _connectionVars = connectionVars;
             _isAadEnabled = isAadEnabled;
             _blobProvider = blobProvider;
@@ -77,7 +77,7 @@ namespace Azure.Monitor.OpenTelemetry.Exporter.Internals
                             }
                         }
 
-                        using var httpMessage = _applicationInsightsRestClient.InternalTrackAsync(data, CancellationToken.None).Result;
+                        using var httpMessage = _applicationInsightsClient.InternalTrackAsync(data, CancellationToken.None).Result;
                         var result = HttpPipelineHelper.IsSuccess(httpMessage, telemetrySchemaTypeCounter);
 
                         if (result == ExportResult.Success)

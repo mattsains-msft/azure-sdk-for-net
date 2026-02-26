@@ -13,10 +13,10 @@ namespace Azure.Monitor.OpenTelemetry.Exporter
     [EditorBrowsable(EditorBrowsableState.Never)]
     public partial class AzureMonitorOpenTelemetryExporterContext : ModelReaderWriterContext
     {
-        private AzureMonitorOpenTelemetryExporterContext? _azureMonitorOpenTelemetryExporterContext;
+        // private AzureMonitorOpenTelemetryExporterContext? _azureMonitorOpenTelemetryExporterContext;
 
-        /// <summary> Gets the default instance </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public AzureMonitorOpenTelemetryExporterContext Default => _azureMonitorOpenTelemetryExporterContext ??= new();
+        // /// <summary> Gets the default instance </summary>
+        // [EditorBrowsable(EditorBrowsableState.Never)]
+        // public AzureMonitorOpenTelemetryExporterContext Default => _azureMonitorOpenTelemetryExporterContext ??= new();
     }
 }
