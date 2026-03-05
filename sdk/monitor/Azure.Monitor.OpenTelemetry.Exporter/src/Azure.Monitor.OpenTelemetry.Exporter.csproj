@@ -9,7 +9,7 @@
     <TargetFrameworks>$(RequiredTargetFrameworks)</TargetFrameworks>
     <IncludeOperationsSharedSource>true</IncludeOperationsSharedSource>
     <AotCompatOptOut>true</AotCompatOptOut>
-    <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
+    <EnableConfigurationBindingGenerator Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net10.0'))">true</EnableConfigurationBindingGenerator>
     <!-- The configuration binding source generator emits SYSLIB1100/SYSLIB1101 for options
          properties that cannot be bound from configuration (for example, the Credential
          (TokenCredential) and Transport properties used by Azure.Core.ClientOptions). These
