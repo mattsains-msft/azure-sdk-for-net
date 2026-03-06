@@ -1,5 +1,13 @@
 namespace Azure.Monitor.OpenTelemetry.Exporter
 {
+    public partial class ApplicationInsightsClientOptions : Azure.Core.ClientOptions
+    {
+        public ApplicationInsightsClientOptions(Azure.Monitor.OpenTelemetry.Exporter.ApplicationInsightsClientOptions.ServiceVersion version = Azure.Monitor.OpenTelemetry.Exporter.ApplicationInsightsClientOptions.ServiceVersion.V2_1) { }
+        public enum ServiceVersion
+        {
+            V2_1 = 1,
+        }
+    }
     public static partial class AzureMonitorExporterExtensions
     {
         public static OpenTelemetry.Logs.LoggerProviderBuilder AddAzureMonitorLogExporter(this OpenTelemetry.Logs.LoggerProviderBuilder builder, System.Action<Azure.Monitor.OpenTelemetry.Exporter.AzureMonitorExporterOptions> configure = null, Azure.Core.TokenCredential credential = null, string name = null) { throw null; }
@@ -41,8 +49,9 @@ namespace Azure.Monitor.OpenTelemetry.Exporter
     }
     public partial class AzureMonitorOpenTelemetryExporterContext : System.ClientModel.Primitives.ModelReaderWriterContext
     {
-        public AzureMonitorOpenTelemetryExporterContext() { }
-        public Azure.Monitor.OpenTelemetry.Exporter.AzureMonitorOpenTelemetryExporterContext Default { get { throw null; } }
+        internal AzureMonitorOpenTelemetryExporterContext() { }
+        public static Azure.Monitor.OpenTelemetry.Exporter.AzureMonitorOpenTelemetryExporterContext Default { get { throw null; } }
+        protected override bool TryGetTypeBuilderCore(System.Type type, out System.ClientModel.Primitives.ModelReaderWriterTypeBuilder builder) { throw null; }
     }
     public sealed partial class AzureMonitorTraceExporter : OpenTelemetry.BaseExporter<System.Diagnostics.Activity>
     {
