@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
 using System;
@@ -362,7 +362,7 @@ namespace Azure.Monitor.OpenTelemetry.Exporter.Internals
                 {
                     if (@event.Name == SemanticConventions.AttributeExceptionEventName)
                     {
-                        var exceptionData = GetExceptionDataDetailsOnTelemetryItem(@event);
+                        var exceptionData = GetExceptionDataDetailsOnTelemetryItem(@event, telemetryItem);
                         if (exceptionData != null)
                         {
                             var exceptionTelemetryItem = new TelemetryItem("Exception", telemetryItem, activity.SpanId, activity.Kind, @event.Timestamp);
@@ -396,7 +396,7 @@ namespace Azure.Monitor.OpenTelemetry.Exporter.Internals
             }
         }
 
-        private static MonitorBase? GetTraceTelemetryData(ActivityEvent activityEvent)
+        private static MonitorBase? GetTraceTelemetryData(ActivityEvent activityEvent, TelemetryItem parentItem)
         {
             if (activityEvent.Name == null)
             {
@@ -417,6 +417,12 @@ namespace Azure.Monitor.OpenTelemetry.Exporter.Internals
                 }
             }
 
+            // inherit parent tags
+            foreach (KeyValuePair<string, string> parentTag in parentItem.Tags)
+            {
+                AddKvpToDictionary(messageData.Properties, parentTag.Key, parentTag.Value);
+            }
+
             return new MonitorBase
             {
                 BaseType = "MessageData",
@@ -424,7 +430,7 @@ namespace Azure.Monitor.OpenTelemetry.Exporter.Internals
             };
         }
 
-        private static MonitorBase? GetExceptionDataDetailsOnTelemetryItem(ActivityEvent activityEvent)
+        private static MonitorBase? GetExceptionDataDetailsOnTelemetryItem(ActivityEvent activityEvent, TelemetryItem parentItem)
         {
             string? exceptionType = null;
             string? exceptionStackTrace = null;
@@ -455,6 +461,12 @@ namespace Azure.Monitor.OpenTelemetry.Exporter.Internals
             if (string.IsNullOrEmpty(exceptionMessage) || exceptionType == null)
             {
                 return null;
+            }
+
+            // inherit parent tags
+            foreach (KeyValuePair<string, string> parentTag in parentItem.Tags)
+            {
+                AddKvpToDictionary(properties, parentTag.Key, parentTag.Value);
             }
 
             TelemetryExceptionDetails exceptionDetails = new(exceptionMessage.Truncate(SchemaConstants.ExceptionDetails_Message_MaxLength))
