@@ -376,7 +376,7 @@ namespace Azure.Monitor.OpenTelemetry.Exporter.Internals
                     }
                     else
                     {
-                        var messageData = GetTraceTelemetryData(@event);
+                        var messageData = GetTraceTelemetryData(@event, telemetryItem);
                         if (messageData != null)
                         {
                             var traceTelemetryItem = new TelemetryItem("Message", telemetryItem, activity.SpanId, activity.Kind, @event.Timestamp);
